@@ -11,7 +11,7 @@
         </button>
         <!-- Brand -->
         <a class="navbar-brand pt-0" href="{{ route('admin:dashboard') }}">
-            <img style="max-height: 6.5rem" src="https://image.freepik.com/free-vector/man-with-map-smartphone-renting-car-driver-using-car-sharing-app-phone-searching-vehicle-vector-illustration-transport-transportation-urban-traffic-location-app-concept_74855-10109.jpg" class="navbar-brand-img" alt="...">
+            <img style="max-height: 6.5rem" src="https://www.nicepng.com/png/full/170-1702606_marriage-vector-wedding-ring-two-rings-icon.png" class="navbar-brand-img" alt="...">
         </a>
         <!-- User -->
         <ul class="nav align-items-center d-md-none">
