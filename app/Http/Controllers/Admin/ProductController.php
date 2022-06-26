@@ -53,6 +53,10 @@ class ProductController extends Controller
             'filters' => json_encode($request->filters)
         ];
 
+        if($request->hasFile('image')){
+            $data['image'] = $request->image->store('products','public');
+        }
+
         if (isset($update_id) && !empty($update_id) && $update_id != 0) {
             $product = Product::where('id', $update_id)->first();
             $product->update($data);

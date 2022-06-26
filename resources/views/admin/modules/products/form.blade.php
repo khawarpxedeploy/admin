@@ -97,7 +97,7 @@
                                         <div class="form-group">
                                             <label class="form-control-label"><span class="required-icon">*
                                                 </span>{{ __('Image') }}</label>
-                                            <input type="file" class="dropify"
+                                            <input type="file" class="dropify" name="image"
                                                 data-allowed-file-extensions="jpg png jpeg gif" data-max-file-size="2M"
                                                 data-default-file="{{ $product->image ?? '' }}" />
                                         </div>
