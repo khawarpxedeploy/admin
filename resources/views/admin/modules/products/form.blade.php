@@ -35,34 +35,35 @@
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox">
                                                 @php
-                                                $checked = '';
-                                                if(isset($product) && $product->fonts_enabled){
-                                                    $checked = 'checked';
-                                                }
+                                                    $checked = '';
+                                                    if (isset($product) && $product->fonts_enabled) {
+                                                        $checked = 'checked';
+                                                    }
                                                 @endphp
-                                                <input {{$checked}} type="checkbox"
-                                                    class="custom-control-input" name="fonts_enabled" id="fonts_enabled">
-                                                <label class="custom-control-label"
-                                                    for="fonts_enabled">Enable Fonts</label>
+                                                <input {{ $checked }} type="checkbox" class="custom-control-input"
+                                                    name="fonts_enabled" id="fonts_enabled">
+                                                <label class="custom-control-label" for="fonts_enabled">Enable Fonts</label>
                                             </div>
-                                            <small class="text-muted ml-4"><strong>When selected fonts will be visible in products</strong></small>
+                                            <small class="text-muted ml-4"><strong>When selected fonts will be visible in
+                                                    products</strong></small>
                                         </div>
                                     </div>
                                     <div class="col-lg-5 col-md-5 offset-md-1">
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox">
                                                 @php
-                                                $checked = '';
-                                                if(isset($product) && $product->symbols_enabled){
-                                                    $checked = 'checked';
-                                                }
+                                                    $checked = '';
+                                                    if (isset($product) && $product->symbols_enabled) {
+                                                        $checked = 'checked';
+                                                    }
                                                 @endphp
-                                                <input {{$checked}} type="checkbox"
-                                                    class="custom-control-input" name="symbols_enabled" id="symbols_enabled">
-                                                <label class="custom-control-label"
-                                                    for="symbols_enabled">Enable Symbols</label>
+                                                <input {{ $checked }} type="checkbox" class="custom-control-input"
+                                                    name="symbols_enabled" id="symbols_enabled">
+                                                <label class="custom-control-label" for="symbols_enabled">Enable
+                                                    Symbols</label>
                                             </div>
-                                            <small class="text-muted ml-4"><strong>When selected symbols will be visible in products</strong></small>
+                                            <small class="text-muted ml-4"><strong>When selected symbols will be visible in
+                                                    products</strong></small>
                                         </div>
                                     </div>
                                 </div>
@@ -89,7 +90,7 @@
                                             <label class="form-control-label"><span class="required-icon">*
                                                 </span>{{ __('Description') }}</label>
                                             <textarea class="form-control form-control-alternative" name="description" id="description" cols="30"
-                                                rows="8">{{$product->description ?? ''}}</textarea>
+                                                rows="8">{{ $product->description ?? '' }}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-lg-5 col-md-5 offset-md-1">
@@ -121,6 +122,31 @@
                                                             {{ $value->question }}</option>
                                                     @else
                                                         <option value="{{ $value->id }}">{{ $value->question }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                @php
+                                    $selected_filters = json_decode($product->filters ?? '');
+                                @endphp
+                                <div class="row mt-3 mb-5">
+                                    <div class="col-lg-8 col-md-8 offset-md-1">
+                                        <label class="form-control-label"><span class="required-icon">*
+                                            </span>Filters</label>
+                                        <select class="form-control form-control-alternative multiple_questions"
+                                            name="filters[]" data-toggle="select" multiple
+                                            data-placeholder="Select questions">
+                                            @if (isset($filters) & !empty($filters))
+                                                @foreach ($filters as $key => $value)
+                                                    @if (isset($selected_filters) & !empty($selected_filters))
+                                                        <option value="{{ $value->id }}"
+                                                            {{ in_array($value->id, $selected_filters) ? 'selected' : '' }}>
+                                                            {{ $value->title }}</option>
+                                                    @else
+                                                        <option value="{{ $value->id }}">{{ $value->title }}
                                                         </option>
                                                     @endif
                                                 @endforeach

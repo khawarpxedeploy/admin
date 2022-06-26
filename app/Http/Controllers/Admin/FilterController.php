@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Product;
-use App\Models\Question;
 use App\Models\Filter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ProductController extends Controller
+class FilterController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +15,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('id', 'desc')
+        $filters = Filter::orderBy('id', 'desc')
         ->get();
-        return view('admin.modules.products.index', compact('products'));
+        return view('admin.modules.filters.index', compact('filters'));
     }
 
     /**
@@ -29,9 +27,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $questions = Question::where('status', 1)->get();
-        $filters = Filter::where('status', 1)->get();
-        return view('admin.modules.products.form', compact('questions', 'filters'));
+        return view('admin.modules.filters.form');
     }
 
     /**
@@ -43,27 +39,18 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $update_id = $request->id;
-        $data = [
-            'name' => $request->name,
-            'price' => $request->price,
-            'fonts_enabled' => ($request->fonts_enabled ? 1 : 0),
-            'symbols_enabled' => ($request->symbols_enabled ? 1 : 0),
-            'description' => $request->description,
-            'questions' => json_encode($request->questions),
-            'filters' => json_encode($request->filters)
-        ];
 
         if (isset($update_id) && !empty($update_id) && $update_id != 0) {
-            $product = Product::where('id', $update_id)->first();
-            $product->update($data);
-            notify()->success('Product updated successfully!');
-            return redirect()->route('admin:products');
+            $filter = Filter::where('id', $update_id)->first();
+            $filter->update($request->all());
+            notify()->success('Filter updated successfully!');
+            return redirect()->route('admin:filters');
         } else {
-            $product = Product::create($data);
-            $last_id = $product->id;
+            $filter = Filter::create(['title' => $request->title]);
+            $last_id = $filter->id;
             if (isset($last_id) && !empty($last_id)) {
-                notify()->success('Product added successfully!');
-                return redirect()->route('admin:products');
+                notify()->success('Filter added successfully!');
+                return redirect()->route('admin:filters');
             } else {
                 notify()->error('Something Went wrong!');
                 return back();
@@ -74,10 +61,10 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\Filter  $filter
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Filter $filter)
     {
         //
     }
@@ -85,25 +72,23 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\Filter  $filter
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $product = Product::find($id);
-        $questions = Question::where('status', 1)->get();
-        $filters = Filter::where('status', 1)->get();
-        return view('admin.modules.products.form', compact('product', 'questions', 'filters'));
+        $filter = Filter::find($id);
+        return view('admin.modules.filters.form', compact('filter'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\Filter  $filter
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Filter $filter)
     {
         //
     }
@@ -111,14 +96,14 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\Filter  $filter
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        $product = Product::find($id);
-        $product->delete();
-        notify()->success('Product deleted successfully!');
+        $filter = Filter::find($id);
+        $filter->delete();
+        notify()->success('Filter deleted successfully!');
         return back();
     }
 
@@ -134,7 +119,7 @@ class ProductController extends Controller
             } else {
                 $status = 0;
             }
-            $change = Product::where('id', $id)->update(['status' => $status]);
+            $change = Filter::where('id', $id)->update(['status' => $status]);
             $status = true;
             $message = "Status Changed";
             notify()->success('Status Changed!');

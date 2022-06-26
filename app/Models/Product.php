@@ -16,7 +16,8 @@ class Product extends Model
         'image',
         'fonts_enabled',
         'symbols_enabled',
-        'questions'
+        'questions',
+        'filters'
     ];
 
     public function getImageAttribute($value)

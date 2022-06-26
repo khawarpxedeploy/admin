@@ -94,6 +94,11 @@
                         <i class="ni ni-bullet-list-67 text-primary"></i> {{ __('Questions') }}
                     </a>
                 </li>
+                <li class="nav-item {{($segment == 'filters' ? 'active': '')}}">
+                    <a class="nav-link" href="{{ route('admin:filters') }}">
+                        <i class="ni ni-ui-04 text-red"></i> {{ __('Filters') }}
+                    </a>
+                </li>
                 {{-- <li class="nav-item {{($segment == 'roles' ? 'active': '')}}">
                     <a class="nav-link" href="{{route('admin:roles')}}">
                         <i class="ni ni-planet text-pink"></i> {{ __('Roles & Permissions') }}

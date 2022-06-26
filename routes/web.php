@@ -7,9 +7,9 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\FilterController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -89,9 +89,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin:'], 
     Route::get('/product-destroy/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
     Route::post('product/change_status', [ProductController::class, 'change_status'])->name('product.status');
 
-     //Customers CRUD Routes
-     Route::get('/customers', [ClientAuthController::class, 'customers'])->name('customers');
-     Route::post('customer/change_status', [ClientAuthController::class, 'change_status'])->name('customer.status');
+    //Customers CRUD Routes
+    Route::get('/customers', [ClientAuthController::class, 'customers'])->name('customers');
+    Route::post('customer/change_status', [ClientAuthController::class, 'change_status'])->name('customer.status');
+
+     //Filters CRUD Routes
+    Route::get('/filters', [FilterController::class, 'index'])->name('filters');
+    Route::get('/filter-create', [FilterController::class, 'create'])->name('filter.create');
+    Route::post('/filter-add', [FilterController::class, 'store'])->name('filter.add');
+    Route::get('/filter/edit/{id}', [FilterController::class, 'edit'])->name('filter.edit');
+    Route::post('/filter/update/{id}', [FilterController::class, 'store'])->name('filter.update');
+    Route::get('/filter-destroy/{id}', [FilterController::class, 'destroy'])->name('filter.destroy');
+    Route::post('filter/change_status', [FilterController::class, 'change_status'])->name('filter.status');
 });
 
 
