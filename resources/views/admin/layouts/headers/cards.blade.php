@@ -71,7 +71,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">{{__('Total Pending Orders')}}</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">{{__('Total Cancelled Orders')}}</h5>
                                     <span class="h2 font-weight-bold mb-0">0</span>
                                 </div>
                                 <div class="col-auto">
