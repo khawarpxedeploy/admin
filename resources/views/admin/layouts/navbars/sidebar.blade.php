@@ -99,6 +99,11 @@
                         <i class="ni ni-ui-04 text-red"></i> {{ __('Filters') }}
                     </a>
                 </li>
+                <li class="nav-item {{($segment == 'addons' ? 'active': '')}}">
+                    <a class="nav-link" href="{{ route('admin:addons') }}">
+                        <i class="ni ni-ungroup text-brown"></i> {{ __('Addons') }}
+                    </a>
+                </li>
                 {{-- <li class="nav-item {{($segment == 'roles' ? 'active': '')}}">
                     <a class="nav-link" href="{{route('admin:roles')}}">
                         <i class="ni ni-planet text-pink"></i> {{ __('Roles & Permissions') }}

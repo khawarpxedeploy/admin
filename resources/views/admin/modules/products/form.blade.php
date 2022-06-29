@@ -108,7 +108,7 @@
                                     $selected = json_decode($product->questions ?? '');
                                 @endphp
                                 <div class="row mt-3 mb-5">
-                                    <div class="col-lg-8 col-md-8 offset-md-1">
+                                    <div class="col-lg-5 col-md-5 offset-md-1 mt-3">
                                         <label class="form-control-label"><span class="required-icon">*
                                             </span>Questions</label>
                                         <select class="form-control form-control-alternative multiple_questions"
@@ -128,12 +128,10 @@
                                             @endif
                                         </select>
                                     </div>
-                                </div>
-                                @php
-                                    $selected_filters = json_decode($product->filters ?? '');
-                                @endphp
-                                <div class="row mt-3 mb-5">
-                                    <div class="col-lg-8 col-md-8 offset-md-1">
+                                    @php
+                                        $selected_filters = json_decode($product->filters ?? '');
+                                    @endphp
+                                    <div class="col-lg-5 col-md-5 mt-3">
                                         <label class="form-control-label"><span class="required-icon">*
                                             </span>Filters</label>
                                         <select class="form-control form-control-alternative multiple_questions"
@@ -144,6 +142,96 @@
                                                     @if (isset($selected_filters) & !empty($selected_filters))
                                                         <option value="{{ $value->id }}"
                                                             {{ in_array($value->id, $selected_filters) ? 'selected' : '' }}>
+                                                            {{ $value->title }}</option>
+                                                    @else
+                                                        <option value="{{ $value->id }}">{{ $value->title }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    @php
+                                        $selected_sizes = json_decode($product->filters ?? '');
+                                    @endphp
+                                    <div class="col-lg-5 col-md-5 offset-md-1 mt-3">
+                                        <label class="form-control-label"><span class="required-icon">*
+                                            </span>Sizes</label>
+                                        <select class="form-control form-control-alternative multiple_questions"
+                                            name="sizes[]" data-toggle="select" multiple data-placeholder="Select sizes">
+                                            @if (isset($sizes) & !empty($sizes))
+                                                @foreach ($sizes as $key => $value)
+                                                    @if (isset($selected_sizes) & !empty($selected_sizes))
+                                                        <option value="{{ $value->id }}"
+                                                            {{ in_array($value->id, $selected_sizes) ? 'selected' : '' }}>
+                                                            {{ $value->title }}</option>
+                                                    @else
+                                                        <option value="{{ $value->id }}">{{ $value->title }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    @php
+                                        $selected_stones = json_decode($product->filters ?? '');
+                                    @endphp
+                                    <div class="col-lg-5 col-md-5 mt-3">
+                                        <label class="form-control-label"><span class="required-icon">*
+                                            </span>Stones</label>
+                                        <select class="form-control form-control-alternative multiple_questions"
+                                            name="stones[]" data-toggle="select" multiple
+                                            data-placeholder="Select stones">
+                                            @if (isset($stones) & !empty($stones))
+                                                @foreach ($stones as $key => $value)
+                                                    @if (isset($selected_stones) & !empty($selected_stones))
+                                                        <option value="{{ $value->id }}"
+                                                            {{ in_array($value->id, $selected_stones) ? 'selected' : '' }}>
+                                                            {{ $value->title }}</option>
+                                                    @else
+                                                        <option value="{{ $value->id }}">{{ $value->title }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    @php
+                                        $selected_weights = json_decode($product->filters ?? '');
+                                    @endphp
+                                    <div class="col-lg-5 col-md-5 offset-md-1 mt-3">
+                                        <label class="form-control-label"><span class="required-icon">*
+                                            </span>Weights</label>
+                                        <select class="form-control form-control-alternative multiple_questions"
+                                            name="weights[]" data-toggle="select" multiple
+                                            data-placeholder="Select weights">
+                                            @if (isset($weights) & !empty($weights))
+                                                @foreach ($weights as $key => $value)
+                                                    @if (isset($selected_weights) & !empty($selected_weights))
+                                                        <option value="{{ $value->id }}"
+                                                            {{ in_array($value->id, $selected_weights) ? 'selected' : '' }}>
+                                                            {{ $value->title }}</option>
+                                                    @else
+                                                        <option value="{{ $value->id }}">{{ $value->title }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    @php
+                                    $selected_engraving = json_decode($product->filters ?? '');
+                                @endphp
+                                    <div class="col-lg-5 col-md-5 mt-3">
+                                        <label class="form-control-label"><span class="required-icon">*
+                                            </span>Engravings</label>
+                                        <select class="form-control form-control-alternative multiple_questions"
+                                            name="engravings[]" data-toggle="select" multiple data-placeholder="Select engravings">
+                                            @if (isset($engravings) & !empty($engravings))
+                                                @foreach ($engravings as $key => $value)
+                                                    @if (isset($selected_engraving) & !empty($selected_engraving))
+                                                        <option value="{{ $value->id }}"
+                                                            {{ in_array($value->id, $selected_engraving) ? 'selected' : '' }}>
                                                             {{ $value->title }}</option>
                                                     @else
                                                         <option value="{{ $value->id }}">{{ $value->title }}

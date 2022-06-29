@@ -2,8 +2,8 @@
 
 @section('content')
     @include('admin.layouts.partials.header', [
-    'title' => __('Add New Addon'),
-    'class' => 'col-lg-12',
+        'title' => __('Add New Addon'),
+        'class' => 'col-lg-12',
     ])
     <?php
     if (isset($addon->id) && $addon->id != 0) {
@@ -27,11 +27,34 @@
                             <fieldset>
                                 <h6 class="heading-small text-muted mb-4">{{ __('Add New Addon') }}</h6>
                                 <div class="row">
+                                    <div class="col-lg-4 col-md-4 offset-md-2">
+                                        <div class="form-group">
+                                            <label class="form-control-label"><span class="required-icon">*
+                                                </span>{{ __('Type') }}</label>
+                                            <select class="form-control" name="type" data-toggle="select" title="Addon type"
+                                                data-live-search="true" data-live-search-placeholder="Search ...">
+                                                <option value="size">Size</option>
+                                                <option value="stone">Stone</option>
+                                                <option value="weight">Weight</option>
+                                                <option value="engraving">Engraving</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 ">
+                                        <div class="form-group">
+                                            <label class="form-control-label"><span class="required-icon">*
+                                                </span>{{ __('Addon Name') }}</label>
+                                            <input class="form-control form-control-alternative" type="text"
+                                                value="{{ $addon->title ?? '' }}" id="title" name="title">
+                                        </div>
+                                    </div>
+
                                     <div class="col-lg-4 col-md-4 offset-md-4">
                                         <div class="form-group">
-                                            <label class="form-control-label"><span class="required-icon">* </span>{{__('Addon')}}</label>
-                                            <input class="form-control form-control-alternative" type="text"
-                                                value="{{ $addon->addon ?? '' }}" id="addon" name="addon">
+                                            <label class="form-control-label"><span class="required-icon">*
+                                                </span>{{ __('Addon Price') }}</label>
+                                            <input class="form-control form-control-alternative" step="0.01" type="number"
+                                                value="{{ $addon->price ?? '' }}" id="price" name="price">
                                         </div>
                                     </div>
                                 </div>

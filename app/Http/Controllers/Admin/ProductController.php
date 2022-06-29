@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Addon;
+use App\Models\Filter;
 use App\Models\Product;
 use App\Models\Question;
-use App\Models\Filter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -31,7 +32,12 @@ class ProductController extends Controller
     {
         $questions = Question::where('status', 1)->get();
         $filters = Filter::where('status', 1)->get();
-        return view('admin.modules.products.form', compact('questions', 'filters'));
+        $sizes = Addon::where('type', Addon::SIZE)->get(['id', 'title']);
+        $stones = Addon::where('type', Addon::STONE)->get(['id', 'title']);
+        $weights = Addon::where('type', Addon::WEIGHT)->get(['id', 'title']);
+        $engravings = Addon::where('type', Addon::ENGRAVING)->get(['id', 'title']);
+
+        return view('admin.modules.products.form', compact('questions', 'filters', 'sizes', 'stones', 'weights', 'engravings'));
     }
 
     /**
@@ -118,7 +124,7 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
         $product = Product::find($id);
         $product->delete();

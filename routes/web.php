@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AddonController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PermissionsController;
@@ -101,6 +102,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin:'], 
     Route::post('/filter/update/{id}', [FilterController::class, 'store'])->name('filter.update');
     Route::get('/filter-destroy/{id}', [FilterController::class, 'destroy'])->name('filter.destroy');
     Route::post('filter/change_status', [FilterController::class, 'change_status'])->name('filter.status');
+
+    //Filters CRUD Routes
+    Route::get('/addons', [AddonController::class, 'index'])->name('addons');
+    Route::get('/addon-create', [AddonController::class, 'create'])->name('addon.create');
+    Route::post('/addon-add', [AddonController::class, 'store'])->name('addon.add');
+    Route::get('/addon/edit/{id}', [AddonController::class, 'edit'])->name('addon.edit');
+    Route::post('/addon/update/{id}', [AddonController::class, 'store'])->name('addon.update');
+    Route::get('/addon-destroy/{id}', [AddonController::class, 'destroy'])->name('addon.destroy');
+    Route::post('addon/change_status', [AddonController::class, 'change_status'])->name('addon.status');
 });
 
 
