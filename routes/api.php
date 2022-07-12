@@ -22,6 +22,8 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
 
     Route::controller(ClientAuthController::class)->group(function(){
         Route::post('register', 'register');
+        Route::post('send-otp', 'sendOtp');
+        Route::post('verify-otp', 'verifyOtp');
         Route::post('login', 'login');
     });
     
@@ -30,6 +32,7 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
         //Customer Auth Actions
         Route::controller(ClientAuthController::class)->group(function(){
             Route::post('user', 'getUser');
+            Route::post('password-update', 'updatePassword');
             Route::post('profile-update', 'profileUpdate');
             Route::post('logout', 'logout');
         });

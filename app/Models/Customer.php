@@ -21,6 +21,7 @@ class Customer extends Authenticatable
         'password',
         'phone',
         'image',
+        'otp',
         'is_verified',
         'address',
         'status'
@@ -32,6 +33,9 @@ class Customer extends Authenticatable
      * @var array
      */
     protected $hidden = [
+        'otp',
+        'updated_at',
+        'created_at',
         'password',
         'remember_token',
     ];

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Api\Client;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Customer;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Auth;
-use Validator;
+use App\Models\Customer;
+use Illuminate\Http\Request;
+use App\Mail\EmailVerification;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -32,8 +35,8 @@ class AuthController extends Controller
             'password' => 'required|string|min:8'
         ], $messages);
 
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
         }
 
         $user = Customer::create([
@@ -41,9 +44,11 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
-
+        $success['user'] = $user;
         $success['token'] =  $user->createToken('auth_token')->plainTextToken;
-   
+
+        $this->requestOtp($user->email);
+
         return $this->sendResponse($success, 'User registered successfully.');
     }
 
@@ -59,8 +64,8 @@ class AuthController extends Controller
             'password' => 'required'
         ], $messages);
 
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
         }
 
         $user = Customer::where('email', $request->email)->first();
@@ -68,14 +73,14 @@ class AuthController extends Controller
             if (Hash::check($request->password, $user->password) && $user->status == 1) {
                 $token = $user->createToken('MyApp')->plainTextToken;
                 $success['token'] = $token;
-                $user->makeHidden(['id','created_at','updated_at']);
+                $user->makeHidden(['id', 'created_at', 'updated_at']);
                 $success['user'] = $user;
                 return $this->sendResponse($success, 'User login successfully.');
             } else {
-                return $this->sendError('Unauthorised.', ['error'=>'Invalid credentials!']);
+                return $this->sendError('Unauthorised.', ['error' => 'Invalid credentials!']);
             }
         } else {
-            return $this->sendError('Unauthorised.', ['error'=>'User does not exist']);
+            return $this->sendError('Unauthorised.', ['error' => 'User does not exist']);
         }
     }
 
@@ -86,7 +91,8 @@ class AuthController extends Controller
         return $this->sendResponse($success, 'User logged out successfully.');
     }
 
-    function profileUpdate(Request $request){
+    function profileUpdate(Request $request)
+    {
 
 
         $messages = array(
@@ -98,9 +104,9 @@ class AuthController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ], $messages);
 
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        } 
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
 
         try {
 
@@ -108,24 +114,23 @@ class AuthController extends Controller
             $user->name = $request->name;
             $user->phone = $request->phone;
             $user->address = $request->address;
-            if($request->hasFile('image')){
-                $user->image = $request->image->store('users','public');
+            if ($request->hasFile('image')) {
+                $user->image = $request->image->store('users', 'public');
             }
             $user->save();
-            $user->makeHidden(['id','created_at','updated_at']);
-            if($user->image){
+            $user->makeHidden(['id', 'created_at', 'updated_at']);
+            if ($user->image) {
                 $user->image = Storage::url($user->image);
             }
             $success['user'] = $user;
             return $this->sendResponse($success, 'User login successfully.');
-
-        } catch(Exception $e){
-            return $this->sendError('Server Error.', ['error'=> $e->getMessage()]);
+        } catch (Exception $e) {
+            return $this->sendError('Server Error.', ['error' => $e->getMessage()]);
         }
-
     }
 
-    public function customers(Request $request){
+    public function customers(Request $request)
+    {
 
         $customers = Customer::orderBy('id', 'desc')->get();
         return view('admin.modules.customers.index', compact('customers'));
@@ -151,27 +156,87 @@ class AuthController extends Controller
         return response()->json(['status' => $status, 'message' => $message]);
     }
 
-    // function store_token(Request $request){
+    public function updatePassword(Request $request){
+        $messages = array(
+            'old_password.required' => __('Old Password field is required.'),
+            'new_password.required' => __('New Password field is required.'),
+            'confirm_password.required' => __('Confirm Password field is required.'),
+            'confirm_password.same' => __('New password and confirm password not matched.'),
+        );
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => 'required',
+            'confirm_password' => 'required|same:new_password'
+        ], $messages);
 
-    //     $messages = array(
-    //         'token.required' => __('Token field is required.')
-    //     );
-    //     $validator = Validator::make($request->all(), [
-    //         'token' => 'required'
-    //     ], $messages);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
 
-    //     if ($validator->fails()) {
-    //         return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
-    //     }
+        $id = $request->user()->id;
+        $user = Customer::find($id);
+        $user->password = Hash::make($request->new_password);
+        $user->save();
 
-    //     $customer = $request->user();
+        return $this->sendResponse([], 'Password updated successfully!');
+    }
 
-    //     $token = array();
-    //     $token['customer_id'] = $customer->id;
-    //     $token['token'] = $request->token;
-    //     CustomerToken::create($token);
+    function store_token(Request $request){
 
-    //     return response()->json(['status' => true, 'message' => "Device token has been stored!"]);
+        $messages = array(
+            'token.required' => __('Token field is required.')
+        );
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ], $messages);
 
-    // }
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $customer = $request->user();
+
+        $token = array();
+        $token['customer_id'] = $customer->id;
+        $token['token'] = $request->token;
+        CustomerToken::create($token);
+
+        return response()->json(['status' => true, 'message' => "Device token has been stored!"]);
+
+    }
+
+    public function sendOtp(Request $request){
+        $email = $request->email;
+        return $this->requestOtp($email);
+    }
+
+    protected function requestOtp($email)
+    {
+        $otp = rand(1000, 9999);
+        Log::info("otp = " . $otp);
+        $user = Customer::where('email', '=', $email)->update(['otp' => $otp]);
+        if ($user) {
+            $user = Customer::where('email', $email)->first();
+            Mail::to($email)->send(new EmailVerification($otp, $user));
+            return $this->sendResponse([], 'OTP sent on registered email.');
+        } else {
+            return $this->sendError('Unauthorised.', ['error' => 'User does not exist']);
+        }
+    }
+
+    public function verifyOtp(Request $request){
+    
+        $user = Customer::where([['email','=',$request->email],['otp','=',$request->otp]])->first();
+        if($user){
+            $user->otp = null;
+            $user->is_verified = 1;
+            $user->save();
+            $success['user'] = $user;
+            $success['token'] = $user->createToken('auth_token')->plainTextToken;
+            return $this->sendResponse($success, 'OTP verified successfully!');
+        }
+        else{
+            return response(["status" => 401, 'message' => 'Invalid OTP! Please try again.']);
+        }
+    }
 }

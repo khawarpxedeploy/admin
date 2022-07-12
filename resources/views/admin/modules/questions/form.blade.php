@@ -1,15 +1,15 @@
-@extends('admin.layouts.app', ['title' => __('Addons')])
+@extends('admin.layouts.app', ['title' => __('Questions')])
 
 @section('content')
     @include('admin.layouts.partials.header', [
-    'title' => __('Add New Addon'),
+    'title' => __('Add New Question'),
     'class' => 'col-lg-12',
     ])
     <?php
-    if (isset($addon->id) && $addon->id != 0) {
-        $submit_url = route('admin:addon.update', [$addon->id ?? '']);
+    if (isset($question->id) && $question->id != 0) {
+        $submit_url = route('admin:question.update', [$question->id ?? '']);
     } else {
-        $submit_url = route('admin:addon.add');
+        $submit_url = route('admin:question.add');
     }
     ?>
     <div class="container-fluid mt--7">
@@ -18,27 +18,27 @@
                 <div class="card bg-secondary shadow">
                     <div class="card-header bg-white border-0">
                         <div class="row align-items-center">
-                            <h3 class="col-12 mb-0">{{ __('Addon Form') }}</h3>
+                            <h3 class="col-12 mb-0">{{ __('Question Form') }}</h3>
                         </div>
                     </div>
                     <div class="card-body">
                         <form id="question_form" method="post" action="{{ $submit_url }}" enctype="multipart/form-data">
                             @csrf
                             <fieldset>
-                                <h6 class="heading-small text-muted mb-4">{{ __('Add New Addon') }}</h6>
+                                <h6 class="heading-small text-muted mb-4">{{ __('Add New Question') }}</h6>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-4 offset-md-4">
                                         <div class="form-group">
-                                            <label class="form-control-label"><span class="required-icon">* </span>{{__('Addon')}}</label>
+                                            <label class="form-control-label"><span class="required-icon">* </span>{{__('Question')}}</label>
                                             <input class="form-control form-control-alternative" type="text"
-                                                value="{{ $addon->addon ?? '' }}" id="addon" name="addon">
+                                                value="{{ $question->question ?? '' }}" id="question" name="question">
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                             <div class="row">
                                 <div class="col-lg-2 col-md-2">
-                                    <a class="btn btn-icon btn-success" href="{{ route('admin:addons') }}" id="back">
+                                    <a class="btn btn-icon btn-success" href="{{ route('admin:questions') }}" id="back">
                                         <span class="btn-inner--icon"><i class="ni ni-bold-left"></i></span>
                                         <span class="btn-inner--text">{{ __('Back') }}</span>
                                     </a>
@@ -66,7 +66,7 @@
             $("#save").on('click', function() {
                 $("#question_form").validate({
                     rules: {
-                        addon: {
+                        question: {
                             required: true,
                         }
                     }
