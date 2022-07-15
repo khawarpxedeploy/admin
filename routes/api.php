@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
 use App\Http\Controllers\Api\Client\ProductsController;
+use App\Http\Controllers\Api\Client\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
             Route::post('user', 'getUser');
             Route::post('password-update', 'updatePassword');
             Route::post('profile-update', 'profileUpdate');
+            Route::post('store-token', 'storeToken');
             Route::post('logout', 'logout');
         });
     
@@ -42,5 +44,9 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
             Route::get('products', 'productsList');
         });
         
+        //Order Actions
+        Route::controller(OrderController::class)->group(function(){
+            Route::post('create-order', 'createOrder');
+        });
     });
 });

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Client;
 
-use Auth;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Models\CustomerToken;
 use App\Mail\EmailVerification;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -108,8 +108,6 @@ class AuthController extends Controller
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        try {
-
             $user = $request->user();
             $user->name = $request->name;
             $user->phone = $request->phone;
@@ -123,10 +121,7 @@ class AuthController extends Controller
                 $user->image = Storage::url($user->image);
             }
             $success['user'] = $user;
-            return $this->sendResponse($success, 'User login successfully.');
-        } catch (Exception $e) {
-            return $this->sendError('Server Error.', ['error' => $e->getMessage()]);
-        }
+            return $this->sendResponse($success, 'Profile updated!.');
     }
 
     public function customers(Request $request)
@@ -181,7 +176,7 @@ class AuthController extends Controller
         return $this->sendResponse([], 'Password updated successfully!');
     }
 
-    function store_token(Request $request){
+    function storeToken(Request $request){
 
         $messages = array(
             'token.required' => __('Token field is required.')
@@ -191,7 +186,7 @@ class AuthController extends Controller
         ], $messages);
 
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
+            return $this->sendError('Validation Error.', $validator->errors());
         }
 
         $customer = $request->user();
@@ -201,7 +196,7 @@ class AuthController extends Controller
         $token['token'] = $request->token;
         CustomerToken::create($token);
 
-        return response()->json(['status' => true, 'message' => "Device token has been stored!"]);
+        return $this->sendResponse([], 'Device token has been stored!');
 
     }
 
