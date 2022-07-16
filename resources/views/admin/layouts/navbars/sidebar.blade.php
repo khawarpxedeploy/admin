@@ -79,6 +79,11 @@
                         <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}
                     </a>
                 </li>
+                <li class="nav-item {{($segment == 'orders' ? 'active': '')}}">
+                    <a class="nav-link" href="{{ route('admin:orders') }}">
+                        <i class="ni ni-bag-17 text-red"></i> {{ __('Orders') }}
+                    </a>
+                </li>
                 <li class="nav-item {{($segment == 'customers' ? 'active': '')}}">
                     <a class="nav-link" href="{{ route('admin:customers') }}">
                         <i class="ni ni-circle-08 text-yellow"></i> {{ __('Customers') }}

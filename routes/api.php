@@ -47,6 +47,7 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
         //Order Actions
         Route::controller(OrderController::class)->group(function(){
             Route::post('create-order', 'createOrder');
+            Route::get('orders', 'history');
         });
     });
 });

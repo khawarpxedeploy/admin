@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\Client;
 
-use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
@@ -32,5 +34,39 @@ class OrderController extends Controller
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
+        $orderID = strtoupper(Str::random(10));
+        $order = [
+            'order_id' => $orderID,
+            'customer_id' => $request->user()->id,
+            'product_id' => intval($request->product_id),
+            'type' => $request->type,
+            'price' => floatval($request->price),
+            'payment_method' => $request->payment_method,
+            'questions' => $request->questions,
+            'addons' => $request->addons,
+            'fonts' => $request->fonts,
+            'symbols' => $request->symbols,
+            'status' => 'pending',
+            'pickup_location' => $request->pickup_location,
+            'delivery_location' => $request->delivery_location
+        ];
+
+        $check = Order::create($order);
+        if($check){
+            $success['order_id'] = $check->order_id;
+            return $this->sendResponse($success, 'Order placed successfully!.');
+        }
+    }
+
+    public function history(Request $request){
+
+        $orders = Order::where('customer_id', $request->user()->id)->orderBy('id', 'desc')
+        ->with('customer', 'product')
+        ->get();
+        if(!$orders){
+            return $this->sendError('Not Found.', ['error' => 'No orders found. Place new order!']);
+        }
+        $success['orders'] = $orders;
+        return $this->sendResponse($success, 'Orders history found!.');
     }
 }

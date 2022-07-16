@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\FilterController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
+use App\Http\Controllers\Admin\OrderController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -111,6 +113,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin:'], 
     Route::post('/addon/update/{id}', [AddonController::class, 'store'])->name('addon.update');
     Route::get('/addon-destroy/{id}', [AddonController::class, 'destroy'])->name('addon.destroy');
     Route::post('addon/change_status', [AddonController::class, 'change_status'])->name('addon.status');
+
+    
+    //Orders Routes
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 });
 
 
