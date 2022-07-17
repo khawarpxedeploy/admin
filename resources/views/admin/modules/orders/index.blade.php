@@ -20,7 +20,6 @@
                                     <tr>
                                         <th>{{ __('Order#') }}</th>
                                         <th>{{ __('Customer') }}</th>
-                                        <th>{{ __('Product') }}</th>
                                         <th>{{ __('Total') }}</th>
                                         <th>{{ __('Payment Method') }}</th>
                                         <th>{{ __('Payment Status') }}</th>
@@ -43,8 +42,7 @@
                                                     </div>
                                                 </td>
                                                 <td>{{ $value->customer->name }}</td>
-                                                <td>{{ $value->product->name }}</td>
-                                                <td><strong>{{ $value->price }}</strong></td>
+                                                <td><strong>{{ $value->total ?? 0.00 }}</strong></td>
                                                 <td class="text-uppercase">{{ $value->payment_method }}</td>
                                                 <td>
                                                     <span class="badge badge-dot mr-4 current_status">

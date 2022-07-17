@@ -6,27 +6,28 @@ use App\Models\Order;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OrderItems;
+use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
-    public function createOrder(Request $request){
+    public function createOrder(Request $request)
+    {
 
         $messages = array(
-            'product_id.required' => __('Product ID is required.'),
-            'product_id.integer' => __('Product ID must be integer value.'),
-            'product_id.exists' => __('Product ID not exists in system.'),
+            'products.required' => __('Products array is required.'),
             'type.required' => __('Order Type is required.'),
             'type.in' => __('Type must be (pickup or delivery).'),
-            'price.required' => __('Price is required.'),
-            'price.regex' => __('Price value must be valid.'),
+            'total.required' => __('Total price is required.'),
+            'total.regex' => __('Total price value must be valid.'),
             'payment_method.required' => __('Payment Method is required.'),
             'payment_method.in' => __('Payment method must be (cash or card).')
         );
         $validator = Validator::make($request->all(), [
-            'product_id' => 'required|integer|exists:products,id',
+            'products' => 'required',
             'type' => 'required|in:pickup,delivery',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'total' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'payment_method' => 'required|in:cash,card'
         ], $messages);
 
@@ -38,33 +39,58 @@ class OrderController extends Controller
         $order = [
             'order_id' => $orderID,
             'customer_id' => $request->user()->id,
-            'product_id' => intval($request->product_id),
             'type' => $request->type,
-            'price' => floatval($request->price),
+            'total' => floatval($request->total),
             'payment_method' => $request->payment_method,
-            'questions' => $request->questions,
-            'addons' => $request->addons,
-            'fonts' => $request->fonts,
-            'symbols' => $request->symbols,
             'status' => 'pending',
             'pickup_location' => $request->pickup_location,
             'delivery_location' => $request->delivery_location
         ];
 
         $check = Order::create($order);
-        if($check){
+        if ($check) {
+            $this->storeOrderProducts($check->id, $request->products);
             $success['order_id'] = $check->order_id;
             return $this->sendResponse($success, 'Order placed successfully!.');
         }
     }
 
-    public function history(Request $request){
+    protected function storeOrderProducts($orderID, $products)
+    {
+
+        $products = json_decode($products);
+        if ($products) {
+            foreach ($products as $product) {
+                $data = [
+                    'order_id' => $orderID,
+                    'product_id' => $product->product_id,
+                    'questions' => json_encode($product->questions),
+                    'addons' => json_encode($product->addons),
+                    'fonts' => $product->fonts,
+                    'symbols' => $product->symbols,
+                    'sub_total' => $product->sub_total,
+                ];
+                OrderItems::create($data);
+            }
+        }
+        return true;
+    }
+
+    public function history(Request $request)
+    {
 
         $orders = Order::where('customer_id', $request->user()->id)->orderBy('id', 'desc')
-        ->with('customer', 'product')
-        ->get();
-        if(!$orders){
+            ->with('customer', 'items')
+            ->get();
+        if (!$orders) {
             return $this->sendError('Not Found.', ['error' => 'No orders found. Place new order!']);
+        }
+        foreach($orders as $order){
+            foreach($order->items as $value){
+                unset($value->order_id);
+                $value->product = Product::select('name', 'price', 'image', 'description')->where('id', $value->product_id)->first();
+                unset($value->product_id);
+            }
         }
         $success['orders'] = $orders;
         return $this->sendResponse($success, 'Orders history found!.');
