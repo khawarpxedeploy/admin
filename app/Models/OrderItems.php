@@ -45,14 +45,14 @@ class OrderItems extends Model
     public function getAddonsAttribute($value)
     {
         if($value){
+           
             $temp = array();
-            $value = json_decode($value);
-            foreach($value as $addon){
-                $check = Addon::where('id', $addon)->select('type', 'title', 'price')->first();
-                if($check){
-                    $temp[] = $check;
-                }
-            }
+            $addons = json_decode($value);
+            // dd($addons->stone);
+            $temp['stone'] = Addon::where('id', $addons->stone)->select('type', 'title', 'price')->first();
+            $temp['size'] = Addon::where('id', $addons->size)->select('type', 'title', 'price')->first();
+            $temp['weight'] = Addon::where('id', $addons->weight)->select('type', 'title', 'price')->first();
+            $temp['engraving'] = Addon::where('id', $addons->engraving)->select('type', 'title', 'price')->first();
             return $temp;
         }
         else{

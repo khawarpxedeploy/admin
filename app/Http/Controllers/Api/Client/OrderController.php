@@ -90,6 +90,7 @@ class OrderController extends Controller
                 unset($value->order_id);
                 $value->product = Product::select('name', 'price', 'image', 'description')->where('id', $value->product_id)->first();
                 unset($value->product_id);
+                
             }
         }
         $success['orders'] = $orders;
