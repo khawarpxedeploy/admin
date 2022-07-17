@@ -118,7 +118,7 @@ class AuthController extends Controller
             $user->save();
             $user->makeHidden(['id', 'created_at', 'updated_at']);
             if ($user->image) {
-                $user->image = Storage::url($user->image);
+                $user->image = config('app.url').Storage::url($user->image);
             }
             $success['user'] = $user;
             return $this->sendResponse($success, 'Profile updated!.');
