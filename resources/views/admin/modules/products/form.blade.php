@@ -152,7 +152,7 @@
                                         </select>
                                     </div>
                                     @php
-                                        $selected_sizes = $product->addons;
+                                        $selected_sizes = $product->addons ?? '';
                                         // dd($selected_sizes);
                                     @endphp
                                     <div class="col-lg-5 col-md-5 offset-md-1 mt-3">
@@ -180,7 +180,7 @@
                                         </select>
                                     </div>
                                     @php
-                                        $selected_stones = $product->addons;
+                                        $selected_stones = $product->addons ?? '';
                                     @endphp
                                     <div class="col-lg-5 col-md-5 mt-3">
                                         <label class="form-control-label"><span class="required-icon">*
@@ -208,7 +208,7 @@
                                         </select>
                                     </div>
                                     @php
-                                        $selected_weights = $product->addons;
+                                        $selected_weights = $product->addons ?? '';
                                     @endphp
                                     <div class="col-lg-5 col-md-5 offset-md-1 mt-3">
                                         <label class="form-control-label"><span class="required-icon">*
@@ -236,7 +236,7 @@
                                         </select>
                                     </div>
                                     @php
-                                        $selected_engraving = $product->addons;
+                                        $selected_engraving = $product->addons ?? '';
                                     @endphp
                                     <div class="col-lg-5 col-md-5 mt-3">
                                         <label class="form-control-label"><span class="required-icon">*

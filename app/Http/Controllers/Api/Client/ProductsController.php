@@ -16,7 +16,7 @@ class ProductsController extends Controller
         $products = Product::where('status', 1)
         ->with('addons')
         ->orderBy('id', 'desc')
-        ->get();
+        ->paginate($request->limit ?? 5);
         $success['products'] = $products;
         if($products->isEmpty()){
      
