@@ -24,7 +24,7 @@ class Product extends Model
     public function getImageAttribute($value)
     {
         if($value){
-           $value = Storage::url($value);
+           $value = config('app.url').Storage::url($value);
         }
         return $value;
     }
