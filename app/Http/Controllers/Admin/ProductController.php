@@ -6,6 +6,7 @@ use App\Models\Addon;
 use App\Models\Filter;
 use App\Models\Product;
 use App\Models\Question;
+use App\Models\ProductAddon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -19,7 +20,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::orderBy('id', 'desc')
-        ->get();
+            ->get();
         return view('admin.modules.products.index', compact('products'));
     }
 
@@ -48,6 +49,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $update_id = $request->id;
         $data = [
             'name' => $request->name,
@@ -59,18 +61,51 @@ class ProductController extends Controller
             'filters' => json_encode($request->filters)
         ];
 
-        if($request->hasFile('image')){
-            $data['image'] = $request->image->store('products','public');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->image->store('products', 'public');
         }
 
         if (isset($update_id) && !empty($update_id) && $update_id != 0) {
             $product = Product::where('id', $update_id)->first();
             $product->update($data);
+            ProductAddon::where('product_id', $update_id)->delete();
+            $sizes = $request->sizes;
+            if ($sizes) {
+                $this->storeAddons($update_id, $sizes);
+            }
+            $stones = $request->stones;
+            if ($stones) {
+                $this->storeAddons($update_id, $stones);
+            }
+            $weights = $request->weights;
+            if ($weights) {
+                $this->storeAddons($update_id, $weights);
+            }
+            $engravings = $request->engravings;
+            if ($engravings) {
+                $this->storeAddons($update_id, $engravings);
+            }
             notify()->success('Product updated successfully!');
             return redirect()->route('admin:products');
         } else {
             $product = Product::create($data);
             $last_id = $product->id;
+            $sizes = $request->sizes;
+            if ($sizes) {
+                $this->storeAddons($last_id, $sizes);
+            }
+            $stones = $request->stones;
+            if ($stones) {
+                $this->storeAddons($last_id, $stones);
+            }
+            $weights = $request->weights;
+            if ($weights) {
+                $this->storeAddons($last_id, $weights);
+            }
+            $engravings = $request->engravings;
+            if ($engravings) {
+                $this->storeAddons($last_id, $engravings);
+            }
             if (isset($last_id) && !empty($last_id)) {
                 notify()->success('Product added successfully!');
                 return redirect()->route('admin:products');
@@ -78,6 +113,17 @@ class ProductController extends Controller
                 notify()->error('Something Went wrong!');
                 return back();
             }
+        }
+    }
+
+    protected function storeAddons($product_id, $addons)
+    {
+        foreach ($addons as $value) {
+            $data = [
+                'product_id' => $product_id,
+                'addon_id' => $value
+            ];
+            ProductAddon::create($data);
         }
     }
 
@@ -100,10 +146,15 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::find($id);
+        $product = Product::where('id', $id)->with('addons')->first();
+        // dd($product);
         $questions = Question::where('status', 1)->get();
         $filters = Filter::where('status', 1)->get();
-        return view('admin.modules.products.form', compact('product', 'questions', 'filters'));
+        $sizes = Addon::where('type', Addon::SIZE)->get(['id', 'title']);
+        $stones = Addon::where('type', Addon::STONE)->get(['id', 'title']);
+        $weights = Addon::where('type', Addon::WEIGHT)->get(['id', 'title']);
+        $engravings = Addon::where('type', Addon::ENGRAVING)->get(['id', 'title']);
+        return view('admin.modules.products.form', compact('product', 'questions', 'filters','sizes', 'stones', 'weights', 'engravings'));
     }
 
     /**

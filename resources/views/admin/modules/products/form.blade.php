@@ -152,7 +152,8 @@
                                         </select>
                                     </div>
                                     @php
-                                        $selected_sizes = json_decode($product->filters ?? '');
+                                        $selected_sizes = $product->addons;
+                                        // dd($selected_sizes);
                                     @endphp
                                     <div class="col-lg-5 col-md-5 offset-md-1 mt-3">
                                         <label class="form-control-label"><span class="required-icon">*
@@ -162,9 +163,14 @@
                                             @if (isset($sizes) & !empty($sizes))
                                                 @foreach ($sizes as $key => $value)
                                                     @if (isset($selected_sizes) & !empty($selected_sizes))
-                                                        <option value="{{ $value->id }}"
-                                                            {{ in_array($value->id, $selected_sizes) ? 'selected' : '' }}>
-                                                            {{ $value->title }}</option>
+                                                        @foreach ($selected_sizes as $slcz)
+                                                            <option value="{{ $slcz->addon_id }}" <?php if ($value->id == $slcz->addon_id) {
+                                                                echo 'selected';
+                                                            } else {
+                                                                echo '';
+                                                            } ?>>
+                                                                {{ $value->title }}</option>
+                                                        @endforeach
                                                     @else
                                                         <option value="{{ $value->id }}">{{ $value->title }}
                                                         </option>
@@ -174,7 +180,7 @@
                                         </select>
                                     </div>
                                     @php
-                                        $selected_stones = json_decode($product->filters ?? '');
+                                        $selected_stones = $product->addons;
                                     @endphp
                                     <div class="col-lg-5 col-md-5 mt-3">
                                         <label class="form-control-label"><span class="required-icon">*
@@ -185,9 +191,14 @@
                                             @if (isset($stones) & !empty($stones))
                                                 @foreach ($stones as $key => $value)
                                                     @if (isset($selected_stones) & !empty($selected_stones))
-                                                        <option value="{{ $value->id }}"
-                                                            {{ in_array($value->id, $selected_stones) ? 'selected' : '' }}>
-                                                            {{ $value->title }}</option>
+                                                        @foreach ($selected_stones as $slcs)
+                                                            <option value="{{ $slcs->addon_id }}" <?php if ($value->id == $slcs->addon_id) {
+                                                                echo 'selected';
+                                                            } else {
+                                                                echo '';
+                                                            } ?>>
+                                                                {{ $value->title }}</option>
+                                                        @endforeach
                                                     @else
                                                         <option value="{{ $value->id }}">{{ $value->title }}
                                                         </option>
@@ -197,7 +208,7 @@
                                         </select>
                                     </div>
                                     @php
-                                        $selected_weights = json_decode($product->filters ?? '');
+                                        $selected_weights = $product->addons;
                                     @endphp
                                     <div class="col-lg-5 col-md-5 offset-md-1 mt-3">
                                         <label class="form-control-label"><span class="required-icon">*
@@ -208,9 +219,14 @@
                                             @if (isset($weights) & !empty($weights))
                                                 @foreach ($weights as $key => $value)
                                                     @if (isset($selected_weights) & !empty($selected_weights))
-                                                        <option value="{{ $value->id }}"
-                                                            {{ in_array($value->id, $selected_weights) ? 'selected' : '' }}>
-                                                            {{ $value->title }}</option>
+                                                        @foreach ($selected_weights as $slcw)
+                                                            <option value="{{ $slcw->addon_id }}" <?php if ($value->id == $slcw->addon_id) {
+                                                                echo 'selected';
+                                                            } else {
+                                                                echo '';
+                                                            } ?>>
+                                                                {{ $value->title }}</option>
+                                                        @endforeach
                                                     @else
                                                         <option value="{{ $value->id }}">{{ $value->title }}
                                                         </option>
@@ -220,19 +236,25 @@
                                         </select>
                                     </div>
                                     @php
-                                    $selected_engraving = json_decode($product->filters ?? '');
-                                @endphp
+                                        $selected_engraving = $product->addons;
+                                    @endphp
                                     <div class="col-lg-5 col-md-5 mt-3">
                                         <label class="form-control-label"><span class="required-icon">*
                                             </span>Engravings</label>
                                         <select class="form-control form-control-alternative multiple_questions"
-                                            name="engravings[]" data-toggle="select" multiple data-placeholder="Select engravings">
+                                            name="engravings[]" data-toggle="select" multiple
+                                            data-placeholder="Select engravings">
                                             @if (isset($engravings) & !empty($engravings))
                                                 @foreach ($engravings as $key => $value)
                                                     @if (isset($selected_engraving) & !empty($selected_engraving))
-                                                        <option value="{{ $value->id }}"
-                                                            {{ in_array($value->id, $selected_engraving) ? 'selected' : '' }}>
-                                                            {{ $value->title }}</option>
+                                                        @foreach ($selected_engraving as $slce)
+                                                            <option value="{{ $slce->addon_id }}" <?php if ($value->id == $slce->addon_id) {
+                                                                echo 'selected';
+                                                            } else {
+                                                                echo '';
+                                                            } ?>>
+                                                                {{ $value->title }}</option>
+                                                        @endforeach
                                                     @else
                                                         <option value="{{ $value->id }}">{{ $value->title }}
                                                         </option>

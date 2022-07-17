@@ -28,4 +28,9 @@ class Product extends Model
         }
         return $value;
     }
+
+    public function addons()
+    {
+        return $this->hasMany(ProductAddon::class);
+    }
 }

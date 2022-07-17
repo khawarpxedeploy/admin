@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers\Api\Client;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Addon;
+use App\Models\Filter;
 use App\Models\Product;
 use App\Models\Question;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ProductsController extends Controller
 {
     public function productsList(Request $request){
 
-        $products = Product::where('status', 1)->get();
+        $products = Product::where('status', 1)
+        ->with('addons')
+        ->orderBy('id', 'desc')
+        ->get();
         $success['products'] = $products;
         if($products->isEmpty()){
      
             return $this->sendResponse($success, 'No products found!');
         }
-        foreach($products as $key => $product){
+        foreach($products as $product){
             if($product->questions){
                 $questions = json_decode($product->questions);
                 if($questions){
@@ -27,6 +32,31 @@ class ProductsController extends Controller
                         $temp[] = $found;
                     }
                     $product->questions = $temp;
+                }
+            }
+            if($product->filters){
+                $filters = json_decode($product->filters);
+                if($filters){
+                    $temp2 = array();
+                    foreach($filters as $filter){
+                        $found = Filter::select('id', 'title')->where('id', $filter)->first();
+                        $temp2[] = $found;
+                    }
+                    $product->filters = $temp2;
+                }
+            }
+            if($product->addons){
+                $addons = $product->addons;
+                if($addons){
+                    $temp3 = array();
+                    foreach($addons as $addon){
+                        
+                        $found = Addon::select('id', 'type', 'title', 'price')->where('id', $addon->addon_id)->first();
+                        
+                        $temp3[] = $found;
+                    }
+                    unset($product->addons);
+                    $product->addons = $temp3;
                 }
             }
         }
