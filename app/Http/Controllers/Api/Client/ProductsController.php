@@ -15,8 +15,11 @@ class ProductsController extends Controller
 {
     public function productsList(Request $request)
     {
-
+        $search = $request->search;
         $products = Product::where('status', 1)
+            ->when($search, function ($query) use ($search) {
+                return $query->where('name','LIKE','%'.$search.'%');
+            })
             ->with('addons')
             ->orderBy('id', 'desc')
             ->paginate($request->limit ?? 5);
@@ -82,12 +85,12 @@ class ProductsController extends Controller
             }
             $toConversion = ($request->currency ? $request->currency : Country::DEFAULT_CURRENCY);
             $product->price = Currency::convert()
-            ->from(Country::DEFAULT_CURRENCY)
-            ->to($toConversion)
-            ->amount($product->price)
-            ->date(date('Y-m-d'))
-            ->round(2)
-            ->get();
+                ->from(Country::DEFAULT_CURRENCY)
+                ->to($toConversion)
+                ->amount($product->price)
+                ->date(date('Y-m-d'))
+                ->round(2)
+                ->get();
         }
         $products->makeHidden(['status', 'created_at', 'updated_at']);
         return $this->sendResponse($success ?? [], 'Products found!.');
