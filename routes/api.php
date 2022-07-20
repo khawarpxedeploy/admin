@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
+use App\Http\Controllers\Api\Client\CountryController;
 use App\Http\Controllers\Api\Client\ProductsController;
 use App\Http\Controllers\Api\Client\OrderController;
 
@@ -26,6 +27,10 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
         Route::post('send-otp', 'sendOtp');
         Route::post('verify-otp', 'verifyOtp');
         Route::post('login', 'login');
+    });
+
+    Route::controller(CountryController::class)->group(function(){
+        Route::get('get-contries', 'countriesList');
     });
     
     Route::middleware('auth:sanctum')->group(function(){

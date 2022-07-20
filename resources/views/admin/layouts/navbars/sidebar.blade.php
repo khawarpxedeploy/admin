@@ -109,6 +109,11 @@
                         <i class="ni ni-ungroup text-brown"></i> {{ __('Addons') }}
                     </a>
                 </li>
+                <li class="nav-item {{($segment == 'countries' ? 'active': '')}}">
+                    <a class="nav-link" href="{{ route('admin:countries') }}">
+                        <i class="ni ni-world text-black"></i> {{ __('Countries') }}
+                    </a>
+                </li>
                 {{-- <li class="nav-item {{($segment == 'roles' ? 'active': '')}}">
                     <a class="nav-link" href="{{route('admin:roles')}}">
                         <i class="ni ni-planet text-pink"></i> {{ __('Roles & Permissions') }}

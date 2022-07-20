@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\Admin\AddonController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AddonController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\RolesController;
+use App\Http\Controllers\Admin\FilterController;
+use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PermissionsController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\RolesController;
-use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\QuestionController;
-use App\Http\Controllers\Admin\FilterController;
-use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
-use App\Http\Controllers\Admin\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +118,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin:'], 
     
     //Orders Routes
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+
+       //Countries CRUD Routes
+       Route::get('/countries', [CountryController::class, 'index'])->name('countries');
+       Route::get('/country-create', [CountryController::class, 'create'])->name('country.create');
+       Route::post('/country-add', [CountryController::class, 'store'])->name('country.add');
+       Route::get('/country/edit/{id}', [CountryController::class, 'edit'])->name('country.edit');
+       Route::post('/country/update/{id}', [CountryController::class, 'store'])->name('country.update');
+       Route::get('/country-destroy/{id}', [CountryController::class, 'destroy'])->name('country.destroy');
+       Route::post('country/change_status', [CountryController::class, 'change_status'])->name('country.status');
 });
 
 
