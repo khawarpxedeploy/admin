@@ -9,6 +9,9 @@ class Country extends Model
 {
     use HasFactory;
 
+    public const DEFAULT_COUNTRY = 'Germany';
+    public const DEFAULT_CURRENCY = 'EUR';
+
     protected $fillable = [
         'name',
         'code',

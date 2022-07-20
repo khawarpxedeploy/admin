@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api\Client;
 
 use App\Models\Addon;
 use App\Models\Filter;
+use App\Models\Country;
 use App\Models\Product;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use AmrShawky\LaravelCurrency\Facade\Currency;
 
 class ProductsController extends Controller
 {
@@ -78,6 +80,14 @@ class ProductsController extends Controller
                     ];
                 }
             }
+            $toConversion = ($request->currency ? $request->currency : Country::DEFAULT_CURRENCY);
+            $product->price = Currency::convert()
+            ->from(Country::DEFAULT_CURRENCY)
+            ->to($toConversion)
+            ->amount($product->price)
+            ->date(date('Y-m-d'))
+            ->round(2)
+            ->get();
         }
         $products->makeHidden(['status', 'created_at', 'updated_at']);
         return $this->sendResponse($success ?? [], 'Products found!.');
