@@ -34,8 +34,6 @@ class Order extends Model
         return json_decode($value);
     }
 
-    
-
         public function customer()
         {
             return $this->belongsTo(Customer::class);

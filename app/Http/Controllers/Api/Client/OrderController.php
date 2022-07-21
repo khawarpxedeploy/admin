@@ -85,11 +85,14 @@ class OrderController extends Controller
         if (!$orders) {
             return $this->sendError('Not Found.', ['error' => 'No orders found. Place new order!']);
         }
+        
         foreach($orders as $order){
+            
             foreach($order->items as $value){
                 unset($value->order_id);
                 $value->product = Product::select('name', 'price', 'image', 'description')->where('id', $value->product_id)->first();
                 unset($value->product_id);
+                
                 
             }
         }

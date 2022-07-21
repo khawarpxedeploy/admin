@@ -48,11 +48,11 @@ class OrderItems extends Model
            
             $temp = array();
             $addons = json_decode($value);
-            // dd($addons->stone);
-            $temp['stone'] = Addon::where('id', $addons->stone)->select('type', 'title', 'price')->first();
-            $temp['size'] = Addon::where('id', $addons->size)->select('type', 'title', 'price')->first();
-            $temp['weight'] = Addon::where('id', $addons->weight)->select('type', 'title', 'price')->first();
-            $temp['engraving'] = Addon::where('id', $addons->engraving)->select('type', 'title', 'price')->first();
+            // dd($addons->weight->id);
+            $temp['stone'] = Addon::where('id', $addons->stone->id ?? '')->select('type', 'title', 'price')->first();
+            $temp['size'] = Addon::where('id', $addons->size->id ?? '')->select('type', 'title', 'price')->first();
+            $temp['weight'] = Addon::where('id', $addons->weight->id ?? '')->select('type', 'title', 'price')->first();
+            $temp['engraving'] = Addon::where('id', $addons->engraving->id ?? '')->select('type', 'title', 'price')->first();
             return $temp;
         }
         else{
