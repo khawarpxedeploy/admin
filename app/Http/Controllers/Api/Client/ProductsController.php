@@ -62,6 +62,7 @@ class ProductsController extends Controller
                         $temp3[] = $found;
                     }
                     unset($product->addons);
+                    dd($temp3);
                     if ($temp3) {
                         $weight = array_filter($temp3, function ($item) {
                             return $item["type"] === 'weight';
