@@ -18,7 +18,7 @@ class ProductsController extends Controller
         $search = $request->search;
         $products = Product::where('status', 1)
             ->when($search, function ($query) use ($search) {
-                return $query->where('name','LIKE','%'.$search.'%');
+                return $query->where('name', 'LIKE', '%' . $search . '%');
             })
             ->with('addons')
             ->orderBy('id', 'desc')
@@ -62,18 +62,21 @@ class ProductsController extends Controller
                         $temp3[] = $found;
                     }
                     unset($product->addons);
-                    $weight = array_filter($temp3, function ($item) {
-                        return $item["type"] === 'weight';
-                    });
-                    $size = array_filter($temp3, function ($item) {
-                        return $item["type"] === 'size';
-                    });
-                    $stone = array_filter($temp3, function ($item) {
-                        return $item["type"] === 'stone';
-                    });
-                    $engraving = array_filter($temp3, function ($item) {
-                        return $item["type"] === 'engraving';
-                    });
+                    if ($temp) {
+                        $weight = array_filter($temp3, function ($item) {
+                            return $item["type"] === 'weight';
+                        });
+                        $size = array_filter($temp3, function ($item) {
+                            return $item["type"] === 'size';
+                        });
+                        $stone = array_filter($temp3, function ($item) {
+                            return $item["type"] === 'stone';
+                        });
+                        $engraving = array_filter($temp3, function ($item) {
+                            return $item["type"] === 'engraving';
+                        });
+                    }
+
 
                     $product->addons = [
                         'weight' => array_values((array)$weight),
