@@ -62,8 +62,6 @@ class ProductsController extends Controller
                         $temp3[] = $found;
                     }
                     unset($product->addons);
-                    dd($temp3);
-                    if ($temp3) {
                         $weight = array_filter($temp3, function ($item) {
                             return $item["type"] === 'weight';
                         });
@@ -76,14 +74,13 @@ class ProductsController extends Controller
                         $engraving = array_filter($temp3, function ($item) {
                             return $item["type"] === 'engraving';
                         });
-                    }
 
 
                     $product->addons = [
-                        'weight' => array_values((array)$weight) ?? null,
-                        'size' => array_values((array)$size) ?? null,
-                        'stone' => array_values((array)$stone) ?? null,
-                        'engraving' => array_values((array)$engraving) ?? null
+                        'weight' => array_values((array)$weight),
+                        'size' => array_values((array)$size),
+                        'stone' => array_values((array)$stone),
+                        'engraving' => array_values((array)$engraving)
                     ];
                 }
             }
