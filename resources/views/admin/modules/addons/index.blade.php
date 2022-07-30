@@ -51,7 +51,6 @@
                                                     <div class="btn badge badge-success badge-pill">#{{ $i }}
                                                     </div>
                                                 </td>
-
                                                 <td><div class="btn badge badge-info text-uppercase badge-pill">{{ $value->type }}
                                                 </div></td>
                                                 <td>{{ $value->title }}</td>

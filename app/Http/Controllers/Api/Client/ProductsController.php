@@ -58,22 +58,40 @@ class ProductsController extends Controller
                     foreach ($addons as $addon) {
 
                         $found = Addon::select('id', 'type', 'title', 'price')->where('id', $addon->addon_id)->first();
+                        if($found){
+                            $toConversion = ($request->currency ? $request->currency : Country::DEFAULT_CURRENCY);
+                            $found->price = Currency::convert()
+                                ->from(Country::DEFAULT_CURRENCY)
+                                ->to($toConversion)
+                                ->amount($found->price)
+                                ->date(date('Y-m-d'))
+                                ->round(2)
+                                ->get() ?? 0.00;
+                        }
 
                         $temp3[] = $found;
                     }
                     unset($product->addons);
-                        $weight = array_filter($temp3, function ($item) {
+                    $weight = array_filter($temp3, function ($item) {
+                        if($item){
                             return $item["type"] === 'weight';
-                        });
-                        $size = array_filter($temp3, function ($item) {
+                        }
+                    });
+                    $size = array_filter($temp3, function ($item) {
+                        if($item){
                             return $item["type"] === 'size';
-                        });
-                        $stone = array_filter($temp3, function ($item) {
+                        }
+                    });
+                    $stone = array_filter($temp3, function ($item) {
+                        if($item){
                             return $item["type"] === 'stone';
-                        });
-                        $engraving = array_filter($temp3, function ($item) {
+                        }
+                    });
+                    $engraving = array_filter($temp3, function ($item) {
+                        if($item){
                             return $item["type"] === 'engraving';
-                        });
+                        }
+                    });
 
 
                     $product->addons = [

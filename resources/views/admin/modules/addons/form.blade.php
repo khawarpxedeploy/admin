@@ -33,10 +33,26 @@
                                                 </span>{{ __('Type') }}</label>
                                             <select class="form-control" name="type" data-toggle="select" title="Addon type"
                                                 data-live-search="true" data-live-search-placeholder="Search ...">
-                                                <option value="size">Size</option>
-                                                <option value="stone">Stone</option>
-                                                <option value="weight">Weight</option>
-                                                <option value="engraving">Engraving</option>
+                                                <option <?php if ($addon->type == 'size') {
+                                                    echo 'selected';
+                                                } else {
+                                                    echo '';
+                                                } ?> value="size">Size</option>
+                                                <option <?php if ($addon->type == 'stone') {
+                                                    echo 'selected';
+                                                } else {
+                                                    echo '';
+                                                } ?> value="stone">Stone</option>
+                                                <option <?php if ($addon->type == 'weight') {
+                                                    echo 'selected';
+                                                } else {
+                                                    echo '';
+                                                } ?> value="weight">Weight</option>
+                                                <option <?php if ($addon->type == 'engraving') {
+                                                    echo 'selected';
+                                                } else {
+                                                    echo '';
+                                                } ?> value="engraving">Engraving</option>
                                             </select>
                                         </div>
                                     </div>
