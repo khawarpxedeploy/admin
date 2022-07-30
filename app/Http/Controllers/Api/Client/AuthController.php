@@ -42,7 +42,8 @@ class AuthController extends Controller
         $user = Customer::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'status' => 0
         ]);
         $success['user'] = $user;
         $success['token'] =  $user->createToken('auth_token')->plainTextToken;
@@ -77,7 +78,7 @@ class AuthController extends Controller
                 $success['user'] = $user;
                 return $this->sendResponse($success, 'User login successfully.');
             } else {
-                return $this->sendError('Unauthorised.', ['error' => 'Invalid credentials!']);
+                return $this->sendError('Unauthorised.', ['error' => 'Invalid credentials or Account not activated!']);
             }
         } else {
             return $this->sendError('Unauthorised.', ['error' => 'User does not exist']);
