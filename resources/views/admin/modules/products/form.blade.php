@@ -68,7 +68,40 @@
                                     </div>
                                 </div>
                                 <div class="row">
-
+                                    <div class="col-lg-5 col-md-5 offset-md-1 mb-3">
+                                        <label class="form-control-label"><span class="required-icon">*
+                                            </span>Category</label>
+                                        <select class="form-control form-control-alternative category_p" name="category"
+                                            data-placeholder="Select category">
+                                            <option value="">-- Select Category --</option>
+                                            @if (isset($categories) & !empty($categories))
+                                                @foreach ($categories as $key => $value)
+                                                    @if (isset($product->category) & !empty($product->category))
+                                                        <option value="{{ $value->id }}" <?php if ($value->id == $product->category) {
+                                                            echo 'selected';
+                                                        } else {
+                                                            echo '';
+                                                        } ?>>
+                                                            {{ $value->name }}</option>
+                                                    @else
+                                                        <option value="{{ $value->id }}">{{ $value->name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5" id="gold_weight" style="display: none">
+                                        <div class="form-group">
+                                            <label class="form-control-label"><span class="required-icon">*
+                                                </span>{{ __('Gold Weight') }}</label>
+                                            <input class="form-control form-control-alternative gold_weight" type="number" step="0.01"
+                                                value="{{ $product->gold_weight ?? '' }}" name="gold_weight">
+                                                <small class="text-muted ml-2"><strong>Add weight value in grams</strong></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-lg-5 col-md-5 offset-md-1">
                                         <div class="form-group">
                                             <label class="form-control-label"><span class="required-icon">*
@@ -294,6 +327,13 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            var category = $(".category_p option:selected").text().toLowerCase();
+                category = $.trim(category);
+                if (category === 'gold') {
+                    $("#gold_weight").css("display", "block");
+                } else {
+                    $("#gold_weight").css("display", "none");
+                }
             $("#save").on('click', function() {
                 $("#product_form").validate({
                     rules: {
@@ -305,6 +345,15 @@
                         },
                     }
                 });
+            });
+            $(".category_p").on('change', function() {
+                var category = $(".category_p option:selected").text().toLowerCase();
+                category = $.trim(category);
+                if (category === 'gold') {
+                    $("#gold_weight").css("display", "block");
+                } else {
+                    $("#gold_weight").css("display", "none");
+                }
             });
             $('.multiple_questions').select2();
         });

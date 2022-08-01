@@ -15,6 +15,8 @@ class Product extends Model
         'price',
         'description',
         'image',
+        'category',
+        'gold_weight',
         'fonts_enabled',
         'symbols_enabled',
         'questions',

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\FilterController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PermissionsController;
@@ -127,6 +128,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin:'], 
        Route::post('/country/update/{id}', [CountryController::class, 'store'])->name('country.update');
        Route::get('/country-destroy/{id}', [CountryController::class, 'destroy'])->name('country.destroy');
        Route::post('country/change_status', [CountryController::class, 'change_status'])->name('country.status');
+
+       //Categories CRUD Routes
+       Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+       Route::get('/category-create', [CategoryController::class, 'create'])->name('category.create');
+       Route::post('/category-add', [CategoryController::class, 'store'])->name('category.add');
+       Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+       Route::post('/category/update/{id}', [CategoryController::class, 'store'])->name('category.update');
+       Route::get('/category-destroy/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+       Route::post('category/change_status', [CategoryController::class, 'change_status'])->name('category.status');
 });
 
 

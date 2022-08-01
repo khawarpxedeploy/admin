@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Addon;
 use App\Models\Filter;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Question;
 use App\Models\ProductAddon;
 use Illuminate\Http\Request;
@@ -37,8 +38,9 @@ class ProductController extends Controller
         $stones = Addon::where('type', Addon::STONE)->get(['id', 'title']);
         $weights = Addon::where('type', Addon::WEIGHT)->get(['id', 'title']);
         $engravings = Addon::where('type', Addon::ENGRAVING)->get(['id', 'title']);
+        $categories = Category::orderBy('id', 'desc')->get();
 
-        return view('admin.modules.products.form', compact('questions', 'filters', 'sizes', 'stones', 'weights', 'engravings'));
+        return view('admin.modules.products.form', compact('questions', 'filters', 'sizes', 'stones', 'weights', 'engravings', 'categories'));
     }
 
     /**
@@ -54,6 +56,8 @@ class ProductController extends Controller
         $data = [
             'name' => $request->name,
             'price' => $request->price,
+            'category' => $request->category,
+            'gold_weight' => $request->gold_weight,
             'fonts_enabled' => ($request->fonts_enabled ? 1 : 0),
             'symbols_enabled' => ($request->symbols_enabled ? 1 : 0),
             'description' => $request->description,
@@ -154,7 +158,8 @@ class ProductController extends Controller
         $stones = Addon::where('type', Addon::STONE)->get(['id', 'title']);
         $weights = Addon::where('type', Addon::WEIGHT)->get(['id', 'title']);
         $engravings = Addon::where('type', Addon::ENGRAVING)->get(['id', 'title']);
-        return view('admin.modules.products.form', compact('product', 'questions', 'filters','sizes', 'stones', 'weights', 'engravings'));
+        $categories = Category::orderBy('id', 'desc')->get();
+        return view('admin.modules.products.form', compact('product', 'questions', 'filters','sizes', 'stones', 'weights', 'engravings', 'categories'));
     }
 
     /**

@@ -89,6 +89,11 @@
                         <i class="ni ni-circle-08 text-yellow"></i> {{ __('Customers') }}
                     </a>
                 </li>
+                <li class="nav-item {{($segment == 'categories' ? 'active': '')}}">
+                    <a class="nav-link" href="{{ route('admin:categories') }}">
+                        <i class="ni ni-bullet-list-67 text-brown"></i> {{ __('Categories') }}
+                    </a>
+                </li>
                 <li class="nav-item {{($segment == 'products' ? 'active': '')}}">
                     <a class="nav-link" href="{{ route('admin:products') }}">
                         <i class="ni ni-diamond text-green"></i> {{ __('Products') }}

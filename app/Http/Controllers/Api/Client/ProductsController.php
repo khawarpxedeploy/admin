@@ -15,6 +15,9 @@ class ProductsController extends Controller
 {
     public function productsList(Request $request)
     {
+        $toConversion = ($request->currency ? $request->currency : Country::DEFAULT_CURRENCY);
+        $rates = $this->currencyRate(Country::DEFAULT_CURRENCY, $toConversion);
+        // dd($rates);
         $search = $request->search;
         $products = Product::where('status', 1)
             ->when($search, function ($query) use ($search) {
@@ -59,14 +62,7 @@ class ProductsController extends Controller
 
                         $found = Addon::select('id', 'type', 'title', 'price')->where('id', $addon->addon_id)->first();
                         if($found){
-                            $toConversion = ($request->currency ? $request->currency : Country::DEFAULT_CURRENCY);
-                            $found->price = Currency::convert()
-                                ->from(Country::DEFAULT_CURRENCY)
-                                ->to($toConversion)
-                                ->amount($found->price)
-                                ->date(date('Y-m-d'))
-                                ->round(2)
-                                ->get() ?? 0.00;
+                            $found->price = round(($found->price * $rates->$toConversion), 2);
                         }
 
                         $temp3[] = $found;
@@ -102,14 +98,14 @@ class ProductsController extends Controller
                     ];
                 }
             }
-            $toConversion = ($request->currency ? $request->currency : Country::DEFAULT_CURRENCY);
-            $product->price = Currency::convert()
-                ->from(Country::DEFAULT_CURRENCY)
-                ->to($toConversion)
-                ->amount($product->price)
-                ->date(date('Y-m-d'))
-                ->round(2)
-                ->get();
+            if($product->gold_weight){
+                $gold_price = $rates->XAU * 28.3495;
+                $product->gold_price_per_gram = $gold_price;
+                $gold_total_rate = ($product->gold_weight * $gold_price);
+                $product->price = $product->price + $gold_total_rate;
+            }
+            $product->price =  round(($product->price * $rates->$toConversion), 2);
+            
         }
         $products->makeHidden(['status', 'created_at', 'updated_at']);
         return $this->sendResponse($success ?? [], 'Products found!.');

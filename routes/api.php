@@ -32,6 +32,12 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
     Route::controller(CountryController::class)->group(function(){
         Route::get('get-contries', 'countriesList');
     });
+
+    //Product Actions
+    Route::controller(ProductsController::class)->group(function(){
+        Route::get('products', 'productsList');
+    });
+    
     
     Route::middleware('auth:sanctum')->group(function(){
     
@@ -44,10 +50,6 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
             Route::post('logout', 'logout');
         });
     
-        //Product Actions
-        Route::controller(ProductsController::class)->group(function(){
-            Route::get('products', 'productsList');
-        });
         
         //Order Actions
         Route::controller(OrderController::class)->group(function(){
