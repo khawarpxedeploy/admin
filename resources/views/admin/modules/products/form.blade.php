@@ -243,7 +243,7 @@
                                     @php
                                         $selected_weights = $product->addons ?? '';
                                     @endphp
-                                    <div class="col-lg-5 col-md-5 offset-md-1 mt-3">
+                                    <div class="col-lg-5 col-md-5 offset-md-1 mt-3" id="weights_addon">
                                         <label class="form-control-label"><span class="required-icon">*
                                             </span>Weights</label>
                                         <select class="form-control form-control-alternative multiple_questions"
@@ -271,7 +271,7 @@
                                     @php
                                         $selected_engraving = $product->addons ?? '';
                                     @endphp
-                                    <div class="col-lg-5 col-md-5 mt-3">
+                                    <div class="col-lg-5 col-md-5 mt-3" id="eng">
                                         <label class="form-control-label"><span class="required-icon">*
                                             </span>Engravings</label>
                                         <select class="form-control form-control-alternative multiple_questions"
@@ -331,8 +331,12 @@
                 category = $.trim(category);
                 if (category === 'gold') {
                     $("#gold_weight").css("display", "block");
+                    $("#weights_addon").css("display", "none");
+                    $('#eng').addClass('offset-md-1');
                 } else {
                     $("#gold_weight").css("display", "none");
+                    $("#weights_addon").css("display", "block");
+                    $('#eng').removeClass('offset-md-1');
                 }
             $("#save").on('click', function() {
                 $("#product_form").validate({
@@ -351,8 +355,13 @@
                 category = $.trim(category);
                 if (category === 'gold') {
                     $("#gold_weight").css("display", "block");
+                    $("#weights_addon").css("display", "none");
+                    $('#eng').addClass('offset-md-1');
+                    
                 } else {
                     $("#gold_weight").css("display", "none");
+                    $("#weights_addon").css("display", "block");
+                    $('#eng').removeClass('offset-md-1');
                 }
             });
             $('.multiple_questions').select2();
