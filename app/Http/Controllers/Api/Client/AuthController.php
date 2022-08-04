@@ -161,7 +161,7 @@ class AuthController extends Controller
         $id = $request->id;
         $status = $request->status;
         if (isset($id) && !empty($id)) {
-            if ($status == 0) {
+            if ($status == 1) {
                 $status = 1;
             } else {
                 $status = 0;

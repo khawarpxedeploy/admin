@@ -107,10 +107,12 @@ class ProductsController extends Controller
                 $product->price = $product->price + $gold_total_rate;
             }
             $product->price =  round(($product->price * $rates->$toConversion), 2);
-            if(isset($request->user()->shop_charges) && $request->user()->shop_charges === 1){
+            
+            if(isset($request->user()->shop_charges) && $request->user()->shop_charges == 1){
                 if(isset($setting) && $setting->shop_charges > 0){
                     $percent = $setting->shop_charges;
                     $product->price *= (1 + $percent / 100);
+                    $product->price = round(($product->price), 2);
                 }
                 
             }
