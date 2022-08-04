@@ -44,7 +44,7 @@
                                                 <td>{{ $value->email }}</td>
                                                 <td>
                                                     <label class="custom-toggle">
-                                                        <input type="checkbox" <?php if($value->shop_charges === 1) {echo 'checked';}else{'';} ?> class="charges_toggle" data-id="{{$value->id}}" data-charges={{$setting->shop_charges ?? 0}}>
+                                                        <input type="checkbox" <?php if($value->shop_charges == "1") {echo 'checked';}else{'';} ?> class="charges_toggle" data-id="{{$value->id}}" data-charges={{$setting->shop_charges ?? 0}}>
                                                         <span class="custom-toggle-slider rounded-circle">{{$setting->shop_charges ?? 0}}%</span>
                                                       </label>
                                                       
