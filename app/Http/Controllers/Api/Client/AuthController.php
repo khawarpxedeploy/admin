@@ -161,11 +161,6 @@ class AuthController extends Controller
         $id = $request->id;
         $status = $request->status;
         if (isset($id) && !empty($id)) {
-            if ($status == 1) {
-                $status = 1;
-            } else {
-                $status = 0;
-            }
             $change = Customer::where('id', $id)->update(['shop_charges' => $status]);
             $status = true;
             $message = "Status Changed";

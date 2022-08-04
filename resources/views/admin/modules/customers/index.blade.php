@@ -134,7 +134,7 @@
                     type: 'POST',
                     url: '{{ route("admin:customer.charges") }}',
                     data: {
-                        'status': status,
+                        'status': check,
                         'id': id,
                         '_token': "{{ csrf_token() }}"
                     },
