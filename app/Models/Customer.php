@@ -22,6 +22,7 @@ class Customer extends Authenticatable
         'phone',
         'image',
         'otp',
+        'shop_charges',
         'is_verified',
         'address',
         'status'

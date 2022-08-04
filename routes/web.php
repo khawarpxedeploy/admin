@@ -98,6 +98,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin:'], 
     //Customers CRUD Routes
     Route::get('/customers', [ClientAuthController::class, 'customers'])->name('customers');
     Route::post('customer/change_status', [ClientAuthController::class, 'change_status'])->name('customer.status');
+    Route::post('customer/charges_status', [ClientAuthController::class, 'charges_status'])->name('customer.charges');
 
      //Filters CRUD Routes
     Route::get('/filters', [FilterController::class, 'index'])->name('filters');

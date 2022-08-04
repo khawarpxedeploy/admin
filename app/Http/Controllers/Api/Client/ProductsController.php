@@ -6,6 +6,7 @@ use App\Models\Addon;
 use App\Models\Filter;
 use App\Models\Country;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,6 +16,7 @@ class ProductsController extends Controller
 {
     public function productsList(Request $request)
     {
+        $setting = Setting::find(1);
         $toConversion = ($request->currency ? $request->currency : Country::DEFAULT_CURRENCY);
         $rates = $this->currencyRate(Country::DEFAULT_CURRENCY, $toConversion);
         // dd($rates);
@@ -105,6 +107,13 @@ class ProductsController extends Controller
                 $product->price = $product->price + $gold_total_rate;
             }
             $product->price =  round(($product->price * $rates->$toConversion), 2);
+            if(isset($request->user()->shop_charges) && $request->user()->shop_charges === 1){
+                if(isset($setting) && $setting->shop_charges > 0){
+                    $percent = $setting->shop_charges;
+                    $product->price *= (1 + $percent / 100);
+                }
+                
+            }
             
         }
         $products->makeHidden(['status', 'created_at', 'updated_at']);

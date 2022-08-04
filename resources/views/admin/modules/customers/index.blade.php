@@ -21,6 +21,7 @@
                                         <th>{{ __('Sr.no') }}</th>
                                         <th>{{ __('Name') }}</th>
                                         <th>{{ __('Email') }}</th>
+                                        <th>{{ __('Shop Charges') }}</th>
                                         <th>{{ __('Status') }}</th>
                                         <th>{{ __('Actions') }}</th>
                                     </tr>
@@ -41,6 +42,13 @@
                                                 </td>
                                                 <td>{{ $value->name }}</td>
                                                 <td>{{ $value->email }}</td>
+                                                <td>
+                                                    <label class="custom-toggle">
+                                                        <input type="checkbox" <?php if($value->shop_charges === 1) {echo 'checked';}else{'';} ?> class="charges_toggle" data-id="{{$value->id}}" data-charges={{$setting->shop_charges ?? 0}}>
+                                                        <span class="custom-toggle-slider rounded-circle">{{$setting->shop_charges ?? 0}}%</span>
+                                                      </label>
+                                                      
+                                                </td>
                                                 <td>
                                                     <span class="badge badge-dot mr-4 current_status">
                                                         @if ($value->status == 1)
@@ -112,6 +120,27 @@
                         if (status == true) {
                             location.reload();
                         }
+                    }
+                });
+            });
+            $('.charges_toggle').on('change', function() {
+                var id = $(this).attr('data-id');
+                var check = 0;
+                if ($(this).is(":checked"))
+                {
+                    check = 1;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route("admin:customer.charges") }}',
+                    data: {
+                        'status': status,
+                        'id': id,
+                        '_token': "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        var status = response.status;
+                        var message = response.message;
                     }
                 });
             });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Client;
 
+use App\Models\Setting;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\CustomerToken;
@@ -129,7 +130,8 @@ class AuthController extends Controller
     {
 
         $customers = Customer::orderBy('id', 'desc')->get();
-        return view('admin.modules.customers.index', compact('customers'));
+        $setting = Setting::find(1);
+        return view('admin.modules.customers.index', compact('customers', 'setting'));
     }
 
     public function change_status(Request $request)
@@ -145,6 +147,26 @@ class AuthController extends Controller
                 $status = 0;
             }
             $change = Customer::where('id', $id)->update(['status' => $status]);
+            $status = true;
+            $message = "Status Changed";
+            notify()->success('Status Changed!');
+        }
+        return response()->json(['status' => $status, 'message' => $message]);
+    }
+
+    public function charges_status(Request $request)
+    {
+        $status = false;
+        $message = "Error in Changing Status";
+        $id = $request->id;
+        $status = $request->status;
+        if (isset($id) && !empty($id)) {
+            if ($status == 0) {
+                $status = 1;
+            } else {
+                $status = 0;
+            }
+            $change = Customer::where('id', $id)->update(['shop_charges' => $status]);
             $status = true;
             $message = "Status Changed";
             notify()->success('Status Changed!');

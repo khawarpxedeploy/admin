@@ -33,12 +33,7 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
         Route::get('get-contries', 'countriesList');
     });
 
-    //Product Actions
-    Route::controller(ProductsController::class)->group(function(){
-        Route::get('products', 'productsList');
-    });
-    
-    
+
     Route::middleware('auth:sanctum')->group(function(){
     
         //Customer Auth Actions
@@ -49,7 +44,11 @@ Route::group(['middleware' => ['ApiHeaderVerify']], function () {
             Route::post('store-token', 'storeToken');
             Route::post('logout', 'logout');
         });
-    
+
+     //Product Actions
+     Route::controller(ProductsController::class)->group(function(){
+        Route::get('products', 'productsList');
+    });
         
         //Order Actions
         Route::controller(OrderController::class)->group(function(){
