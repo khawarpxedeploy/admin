@@ -1,6 +1,7 @@
 @php
     $segment = Request::segment(2);
     $segmentSecondary = Request::segment(3);
+    $setting = App\Models\Setting::find(1);
 @endphp
 <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
     <div class="container-fluid">
@@ -11,7 +12,7 @@
         </button>
         <!-- Brand -->
         <a class="navbar-brand pt-0" href="{{ route('admin:dashboard') }}">
-            <img style="max-height: 6.5rem" src="https://www.nicepng.com/png/full/170-1702606_marriage-vector-wedding-ring-two-rings-icon.png" class="navbar-brand-img" alt="...">
+            <img style="max-height: 6.5rem" src="{{$setting->logo ?? 'https://www.nicepng.com/png/full/170-1702606_marriage-vector-wedding-ring-two-rings-icon.png'}}" class="navbar-brand-img" alt="...">
         </a>
         <!-- User -->
         <ul class="nav align-items-center d-md-none">
@@ -119,16 +120,12 @@
                         <i class="ni ni-world text-black"></i> {{ __('Countries') }}
                     </a>
                 </li>
-                {{-- <li class="nav-item {{($segment == 'roles' ? 'active': '')}}">
-                    <a class="nav-link" href="{{route('admin:roles')}}">
-                        <i class="ni ni-planet text-pink"></i> {{ __('Roles & Permissions') }}
+                 <li class="nav-item {{($segment == 'settings' ? 'active': '')}}">
+                    <a class="nav-link" href="{{route('admin:settings')}}">
+                        <i class="ni ni-planet text-pink"></i> {{ __('Settings') }}
                     </a>
                 </li>
-                <li class="nav-item {{($segment == 'users' ? 'active': '')}}">
-                    <a class="nav-link" href="{{ route('admin:users') }}">
-                        <i class="ni ni-circle-08 text-red"></i> {{ __('Users') }}
-                    </a>
-                </li> --}}
+               
             </ul>
         </div>
     </div>

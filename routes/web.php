@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\FilterController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -137,6 +138,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin:'], 
        Route::post('/category/update/{id}', [CategoryController::class, 'store'])->name('category.update');
        Route::get('/category-destroy/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
        Route::post('category/change_status', [CategoryController::class, 'change_status'])->name('category.status');
+
+       //Settings Routes
+       Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+       Route::post('/settings', [SettingController::class, 'store'])->name('settings.store');
 });
 
 
