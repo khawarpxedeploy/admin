@@ -343,10 +343,7 @@
                     rules: {
                         name: {
                             required: true,
-                        },
-                        price: {
-                            required: true,
-                        },
+                        }
                     }
                 });
             });

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Setting;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use AmrShawky\LaravelCurrency\Facade\Currency;
 
@@ -18,14 +19,18 @@ class ProductsController extends Controller
     {
         $setting = Setting::find(1);
         $toConversion = ($request->currency ? $request->currency : Country::DEFAULT_CURRENCY);
-        $rates = $this->currencyRate(Country::DEFAULT_CURRENCY, $toConversion);
-        // dd($rates);
+        $goldRate = $this->currencyRate($toConversion);
+        $currencyConverted = Currency::convert()
+        ->from(Country::DEFAULT_CURRENCY)
+        ->to($toConversion)
+        ->round(2)
+        ->get();
         $search = $request->search;
         $products = Product::where('status', 1)
             ->when($search, function ($query) use ($search) {
                 return $query->where('name', 'LIKE', '%' . $search . '%');
             })
-            ->with('addons')
+            ->with('addons', 'pcategory')
             ->orderBy('id', 'desc')
             ->paginate($request->limit ?? 5);
         $success['products'] = $products;
@@ -64,7 +69,7 @@ class ProductsController extends Controller
 
                         $found = Addon::select('id', 'type', 'title', 'price')->where('id', $addon->addon_id)->first();
                         if($found){
-                            $found->price = round(($found->price * $rates->$toConversion), 2);
+                            $found->price = round(($found->price * $currencyConverted), 2);
                         }
 
                         $temp3[] = $found;
@@ -100,13 +105,15 @@ class ProductsController extends Controller
                     ];
                 }
             }
-            if($product->gold_weight){
-                $gold_price = $rates->XAU * 28.3495;
-                $product->gold_price_per_gram = $gold_price;
-                $gold_total_rate = ($product->gold_weight * $gold_price);
-                $product->price = $product->price + $gold_total_rate;
+            // dd($product->price);
+            $product->price = round(($product->price * $currencyConverted), 2);
+            
+            $category_name = strtolower(($product->pcategory->name ?? ''));
+            if($category_name == 'gold' && $product->gold_weight){
+                $product->gold_price_per_gram = $goldRate;
+                $gold_total_rate = ($product->gold_weight * $goldRate);
+                $product->price = round(($product->price + $gold_total_rate), 2);
             }
-            $product->price =  round(($product->price * $rates->$toConversion), 2);
             
             if(isset($request->user()->shop_charges) && $request->user()->shop_charges == 1){
                 if(isset($setting) && $setting->shop_charges > 0){

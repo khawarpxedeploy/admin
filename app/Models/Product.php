@@ -31,6 +31,11 @@ class Product extends Model
         return $value;
     }
 
+    public function pcategory()
+    {
+        return $this->belongsTo(Category::class, 'category');
+    }
+
     public function addons()
     {
         return $this->hasMany(ProductAddon::class);

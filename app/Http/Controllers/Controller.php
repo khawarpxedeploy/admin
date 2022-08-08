@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
 use Exception;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
@@ -51,28 +52,16 @@ class Controller extends BaseController
         return response()->json($response, $code);
     }
 
-    public function currencyRate($from, $to)
+    public function currencyRate($to)
     {
-        // Fetching JSON
-        $req_url = 'https://api.metalpriceapi.com/v1/latest?api_key=9582bb432a29b8a9e840b94e1b898f78&base='.$from.'&currencies='.$to.',XAU,XAG';
-        $response_json = file_get_contents($req_url);
+        $res = 'gram_in_'.strtolower($to);
+        $response = Http::withHeaders([
+            'X-API-KEY' => '61b3a28a047c922262ac728374509e3361b3a28a'
+        ])->get('http://goldpricez.com/api/rates/currency/'.strtolower($to).'/measure/all');
 
-        // Continuing if we got a result
-        if (false !== $response_json) {
+        $response = $response->json();
+        $response = json_decode($response);
+        return $response->$res;
 
-            // Try/catch for json_decode operation
-            try {
-
-                // Decoding
-                $response_object = json_decode($response_json);
-                if($response_object->success){
-                    return $response_object->rates;
-                }else{
-                    return false;
-                }
-            } catch (Exception $e) {
-                // Handle JSON parse error...
-            }
-        }
     }
 }
