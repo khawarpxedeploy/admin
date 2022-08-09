@@ -14,7 +14,8 @@ class DashboardController extends Controller
         $orders = Order::get()->count();
         $pending = Order::where('status', 'pending')->get()->count();
         $accepted = Order::where('status', 'accepted')->get()->count();
+        $delivered = Order::where('status', 'delivered')->get()->count();
         $cancelled = Order::where('status', 'cancelled')->get()->count();
-        return view('admin.modules.dashboard.dashboard', compact('customers', 'orders', 'pending', 'accepted', 'cancelled'));
+        return view('admin.modules.dashboard.dashboard', compact('customers', 'orders', 'pending', 'accepted', 'cancelled', 'delivered'));
     }
 }
