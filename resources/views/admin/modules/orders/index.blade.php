@@ -1,13 +1,11 @@
 @extends('admin.layouts.app', ['title' => __('Orders')])
 @section('css')
-
     @include('admin.layouts.partials.datatables.dataTablesStyles')
-
 @endsection
 @section('content')
     @include('admin.layouts.partials.header', [
-    'title' => __('Orders'),
-    'class' => 'col-lg-7'
+        'title' => __('Orders'),
+        'class' => 'col-lg-7',
     ])
     <div class="container-fluid mt--7">
         <div class="row">
@@ -38,11 +36,14 @@
                                             @endphp
                                             <tr>
                                                 <td>
-                                                    <div class="btn badge badge-success badge-pill">#{{ $value->order_id }}
-                                                    </div>
+                                                    <a href="{{ url('/admin/order/detail/' . $value->id) }}">
+                                                        <div class="btn badge badge-success badge-pill">
+                                                            #{{ $value->order_id }}
+                                                        </div>
+                                                    </a>
                                                 </td>
                                                 <td>{{ $value->customer->name }}</td>
-                                                <td><strong>{{ $value->total ?? 0.00 }}</strong></td>
+                                                <td><strong>{{ $value->total ?? 0.0 }}</strong></td>
                                                 <td class="text-uppercase">{{ $value->payment_method }}</td>
                                                 <td>
                                                     <span class="badge badge-dot mr-4 current_status">
@@ -58,20 +59,26 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control form-control-alternative" data-toggle="select">
-                                                    @if (isset($statuses) & !empty($statuses))
-                                                        @foreach ($statuses as $key => $status)
-                                                            @if (isset($value->status) & !empty($value->status))
-                                                                <option value="{{ $status }}"
-                                                                    <?php if($status == $value->status) { echo 'selected'; } else { echo ''; } ?>>
-                                                                    {{ strtoupper($status) }}</option>
-                                                            @else
-                                                                <option class="text-uppercase" value="{{ $status }}">{{ $status }}
-                                                                </option>
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </select>
+                                                    <select class="form-control form-control-alternative"
+                                                        data-toggle="select">
+                                                        @if (isset($statuses) & !empty($statuses))
+                                                            @foreach ($statuses as $key => $status)
+                                                                @if (isset($value->status) & !empty($value->status))
+                                                                    <option value="{{ $status }}"
+                                                                        <?php if ($status == $value->status) {
+                                                                            echo 'selected';
+                                                                        } else {
+                                                                            echo '';
+                                                                        } ?>>
+                                                                        {{ strtoupper($status) }}</option>
+                                                                @else
+                                                                    <option class="text-uppercase"
+                                                                        value="{{ $status }}">{{ $status }}
+                                                                    </option>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="dropdown">

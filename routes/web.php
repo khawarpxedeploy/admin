@@ -121,6 +121,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin:'], 
     
     //Orders Routes
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+    Route::get('/order/detail/{id}', [OrderController::class, 'detail'])->name('order.detail');
 
        //Countries CRUD Routes
        Route::get('/countries', [CountryController::class, 'index'])->name('countries');
