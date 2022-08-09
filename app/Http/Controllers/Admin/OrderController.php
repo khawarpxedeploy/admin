@@ -41,4 +41,19 @@ class OrderController extends Controller
 
             return view('admin.modules.orders.detail', compact('order'));
     }
+
+    public function change_status(Request $request)
+    {
+        $status = false;
+        $message = "Error in Changing Status";
+        $id = $request->id;
+        $status = $request->status;
+        if (isset($id) && !empty($id)) {
+            Order::where('id', $id)->update(['status' => $status]);
+            $status = true;
+            $message = "Status Changed";
+            notify()->success('Status Changed!');
+        }
+        return response()->json(['status' => $status, 'message' => $message]);
+    }
 }

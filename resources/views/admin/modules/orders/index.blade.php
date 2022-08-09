@@ -59,8 +59,8 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control form-control-alternative"
-                                                        data-toggle="select">
+                                                    <select class="form-control form-control-alternative os"
+                                                        data-toggle="select" data-id="{{$value->id}}">
                                                         @if (isset($statuses) & !empty($statuses))
                                                             @foreach ($statuses as $key => $status)
                                                                 @if (isset($value->status) & !empty($value->status))
@@ -119,13 +119,13 @@
         @include('admin.layouts.partials.datatables.dataTablesJs')
 
 
-        {{-- <script type="text/javascript">
-            $('.status-change').on('click', function() {
-                var status = $(this).attr('rel');
+        <script type="text/javascript">
+            $('.os').on('change', function() {
+                var status = $(this).val();
                 var id = $(this).attr('data-id');
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route("admin:customer.status") }}',
+                    url: '{{ route("admin:order.status") }}',
                     data: {
                         'status': status,
                         'id': id,
@@ -141,7 +141,7 @@
                     }
                 });
             });
-        </script> --}}
+        </script>
     @endpush
 
 @endsection
