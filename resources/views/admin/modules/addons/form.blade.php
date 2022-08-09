@@ -33,22 +33,22 @@
                                                 </span>{{ __('Type') }}</label>
                                             <select class="form-control" name="type" data-toggle="select" title="Addon type"
                                                 data-live-search="true" data-live-search-placeholder="Search ...">
-                                                <option <?php if ($addon->type == 'size') {
+                                                <option <?php if (isset($addon->type) && $addon->type == 'size') {
                                                     echo 'selected';
                                                 } else {
                                                     echo '';
                                                 } ?> value="size">Size</option>
-                                                <option <?php if ($addon->type == 'stone') {
+                                                <option <?php if (isset($addon->type) && $addon->type == 'stone') {
                                                     echo 'selected';
                                                 } else {
                                                     echo '';
                                                 } ?> value="stone">Stone</option>
-                                                <option <?php if ($addon->type == 'weight') {
+                                                <option <?php if (isset($addon->type) && $addon->type == 'weight') {
                                                     echo 'selected';
                                                 } else {
                                                     echo '';
                                                 } ?> value="weight">Weight</option>
-                                                <option <?php if ($addon->type == 'engraving') {
+                                                <option <?php if (isset($addon->type) && $addon->type == 'engraving') {
                                                     echo 'selected';
                                                 } else {
                                                     echo '';
